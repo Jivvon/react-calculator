@@ -71,7 +71,6 @@ class Calculator extends React.Component {
             displayValue,
           });
         }
-        console.log(this.state.history);
       },
       // TODO: 사칙연산 구현
       "÷": () => {
@@ -104,7 +103,6 @@ class Calculator extends React.Component {
           this.setState({ history: history.concat({ prevVal, displayValue }) });
         }
         this.setState({ displayValue });
-        console.log(this.state.history);
       },
       ".": () => {
         if (Number(displayValue) !== 0) {
@@ -176,7 +174,19 @@ class Calculator extends React.Component {
           </ButtonGroup>
         </Panel>
         <History>
-          <Box></Box>
+          {this.state.history.map((x, i) => {
+            return (
+              <Box
+                key={i}
+                onClick={() => {
+                  this.setState({ displayValue: x.prevVal });
+                }}
+              >
+                {x.prevVal}
+                <br />= {x.displayValue}
+              </Box>
+            );
+          })}
         </History>
         {/* TODO: History componet를 이용해 map 함수와 Box styled div를 이용해 history 표시 */}
       </Container>
