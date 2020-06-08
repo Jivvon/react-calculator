@@ -100,12 +100,16 @@ class Calculator extends React.Component {
       "=": () => {
         if (lastChar !== "" && operatorKeys.includes(lastChar)) {
           displayValue = displayValue.substr(0, displayValue.length - 1);
+          this.setState({ displayValue });
         } else if (lastChar !== "") {
           let prevVal = displayValue;
           displayValue = evalFunc(displayValue);
-          this.setState({ history: history.concat({ prevVal, displayValue }) });
+          if (prevVal != displayValue)
+            this.setState({
+              history: history.concat({ prevVal, displayValue }),
+              displayValue,
+            });
         }
-        this.setState({ displayValue });
       },
       ".": () => {
         const displayValueSplited = displayValue.split(/[+×÷-]/g);
