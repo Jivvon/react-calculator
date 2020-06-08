@@ -40,10 +40,11 @@ class Calculator extends React.Component {
   // TODO: history 추가
   state = {
     displayValue: "",
+    history: [],
   };
 
   onClickButton = (key) => {
-    let { displayValue = "" } = this.state;
+    let { displayValue = "", history = [] } = this.state;
     displayValue = "" + displayValue;
     const lastChar = displayValue.substr(displayValue.length - 1);
     const operatorKeys = ["÷", "×", "-", "+"];
@@ -90,9 +91,12 @@ class Calculator extends React.Component {
         if (lastChar !== "" && operatorKeys.includes(lastChar)) {
           displayValue = displayValue.substr(0, displayValue.length - 1);
         } else if (lastChar !== "") {
+          let prevVal = displayValue;
           displayValue = evalFunc(displayValue);
+          this.setState({ history: history.concat({ prevVal, displayValue }) });
         }
         this.setState({ displayValue });
+        console.log(this.state.history);
       },
       ".": () => {
         if (Number(displayValue) !== 0) {
