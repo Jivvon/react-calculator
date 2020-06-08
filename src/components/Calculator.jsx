@@ -36,10 +36,10 @@ const evalFunc = function(string) {
 class Calculator extends React.Component {
   // TODO: history 추가
   state = {
-    displayValue: ""
+    displayValue: "",
   };
 
-  onClickButton = key => {
+  onClickButton = (key) => {
     let { displayValue = "" } = this.state;
     displayValue = "" + displayValue;
     const lastChar = displayValue.substr(displayValue.length - 1);
@@ -59,7 +59,11 @@ class Calculator extends React.Component {
       // TODO: 사칙연산 구현
       "÷": () => {},
       "×": () => {},
-      "-": () => {},
+      "-": () => {
+        if (lastChar !== "" && !operatorKeys.includes(lastChar)) {
+          this.setState({ displayValue: displayValue + "-" });
+        }
+      },
       "+": () => {
         // + 연산 참고하여 연산 구현
         if (lastChar !== "" && !operatorKeys.includes(lastChar)) {
@@ -80,7 +84,7 @@ class Calculator extends React.Component {
           displayValue += "0";
           this.setState({ displayValue });
         }
-      }
+      },
     };
 
     if (proc[key]) {
@@ -136,7 +140,6 @@ class Calculator extends React.Component {
           </ButtonGroup>
         </Panel>
         {/* TODO: History componet를 이용해 map 함수와 Box styled div를 이용해 history 표시 */}
-
       </Container>
     );
   }
