@@ -84,7 +84,10 @@ class Calculator extends React.Component {
         }
       },
       "-": () => {
-        if (lastChar !== "" && !operatorKeys.includes(lastChar)) {
+        if (
+          (lastChar !== "" && !operatorKeys.includes(lastChar)) ||
+          displayValue.length == 0
+        ) {
           this.setState({ displayValue: displayValue + "-" });
         }
       },
@@ -105,13 +108,16 @@ class Calculator extends React.Component {
         this.setState({ displayValue });
       },
       ".": () => {
-        if (Number(displayValue) !== 0) {
+        const displayValueSplited = displayValue.split(/[+×÷-]/g);
+        if (
+          displayValueSplited[displayValueSplited.length - 1].indexOf(".") == -1
+        ) {
           displayValue += ".";
           this.setState({ displayValue });
         }
       },
       "0": () => {
-        if (Number(displayValue) !== 0) {
+        if (displayValue.length !== 1 || Number(displayValue) !== 0) {
           displayValue += "0";
           this.setState({ displayValue });
         }
