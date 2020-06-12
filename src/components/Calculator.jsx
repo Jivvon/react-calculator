@@ -33,6 +33,11 @@ const evalFunc = function(string) {
   // eslint-disable-next-line no-new-func
   if (string.indexOf("÷") !== -1) string = string.replace(/÷/g, "/");
   if (string.indexOf("×") !== -1) string = string.replace(/×/g, "*");
+  const checkSqrt = string.match(/[√]/g);
+  if (checkSqrt != null) {
+    string = string.replace(/[√\(\)]/g, "");
+    return Math.pow(Number.parseInt(string), 1 / (2 * checkSqrt.length));
+  }
   return new Function("return (" + string + ")")();
 };
 
@@ -64,10 +69,7 @@ class Calculator extends React.Component {
           let prevVal = "√(" + displayValue + ")";
           displayValue = Math.sqrt(evalFunc(displayValue));
           this.setState({
-            history: history.concat({
-              prevVal,
-              displayValue,
-            }),
+            history: [{ prevVal, displayValue }, ...history],
             displayValue,
           });
         }
@@ -106,7 +108,7 @@ class Calculator extends React.Component {
           displayValue = evalFunc(displayValue);
           if (prevVal != displayValue)
             this.setState({
-              history: history.concat({ prevVal, displayValue }),
+              history: [{ prevVal, displayValue }, ...history],
               displayValue,
             });
         }
@@ -189,11 +191,12 @@ class Calculator extends React.Component {
               <Box
                 key={i}
                 onClick={() => {
-                  this.setState({ displayValue: x.prevVal });
+                  if (this.state.displayValue[0] != "√")
+                    this.setState({ displayValue: x.prevVal });
                 }}
               >
-                {x.prevVal}
-                <br />= {x.displayValue}
+                <div>{x.prevVal}</div>
+                <div>{`= ${x.displayValue}`}</div>
               </Box>
             );
           })}
